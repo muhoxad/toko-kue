@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MY TOKO KUE - Premium Bakery</title>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --primary: #ff3838;
+      --accent: #ffcc00;
+      --glass: rgba(255, 255, 255, 0.1);
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      background-image: url('../toko_kue/gambar/baground_toko.jpg');
+      background-attachment: fixed;
+      background-size: cover;
+      background-position: center;
+      color: #fff;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      overflow-x: hidden;
+    }
+
+    /* Overlay agar teks tetap tajam di atas gambar */
+    body::before {
+      content: "";
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: radial-gradient(circle, rgba(0,0,0,0.2) 0%, rgba(0,0,0,0.8) 100%);
+      z-index: -1;
+    }
+
+    /* NAVBAR */
+    .navbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: rgba(0, 0, 0, 0.7);
+      backdrop-filter: blur(15px);
+      padding: 15px 8%;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .logo { font-size: 22px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; }
+    .logo span { color: var(--primary); }
+
+    .nav-links { display: flex; align-items: center; gap: 20px; }
+    .nav-links a { text-decoration: none; color: #fff; font-size: 14px; font-weight: 600; transition: 0.3s; }
+    
+    .logout-btn {
+      background: #fff;
+      color: #000 !important;
+      padding: 8px 18px;
+      border-radius: 10px;
+      font-weight: 800 !important;
+    }
+
+    .hero { text-align: center; padding: 60px 20px 20px; }
+    .hero h1 { font-size: 2.5rem; font-weight: 800; margin-bottom: 10px; }
+    .hero p { opacity: 0.8; font-weight: 300; }
+
+    
+    .container {
+      max-width: 1200px;
+      margin: 40px auto;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 30px;
+      padding: 0 25px 100px;
+    }
+
+    
+    .card {
+      background: var(--glass);
+      backdrop-filter: blur(10px);
+      border-radius: 30px;
+      overflow: hidden;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    .card:hover { transform: translateY(-10px); border-color: var(--accent); box-shadow: 0 20px 40px rgba(0,0,0,0.4); }
+
+    .image-container { position: relative; height: 220px; overflow: hidden; }
+    .card img { width: 100%; height: 100%; object-fit: cover; transition: 0.6s; }
+    .card:hover img { transform: scale(1.1); }
+
+    /* BADGES */
+    .po-badge {
+      position: absolute;
+      top: 15px; right: 15px;
+      background: var(--accent);
+      color: #000;
+      padding: 5px 12px;
+      border-radius: 8px;
+      font-size: 10px;
+      font-weight: 800;
+      z-index: 2;
+    }
+
+    .best-seller-badge {
+      position: absolute;
+      top: 15px; left: 15px;
+      background: linear-gradient(45deg, #ffcc00, #ff9500);
+      color: #000;
+      padding: 5px 12px;
+      border-radius: 8px;
+      font-size: 10px;
+      font-weight: 800;
+      z-index: 2;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+    }
+
+    .card-body { padding: 25px; }
+    .card h3 { font-size: 18px; font-weight: 700; margin-bottom: 10px; letter-spacing: 0.5px; }
+
+    /* P.O INFO BOX */
+    .po-info {
+      background: rgba(255, 204, 0, 0.1);
+      border: 1px dashed var(--accent);
+      padding: 10px 15px;
+      border-radius: 12px;
+      margin: 15px 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .po-status { font-size: 11px; font-weight: 700; color: var(--accent); }
+    .po-time { font-size: 10px; color: #bbb; }
+
+    .price { font-size: 24px; font-weight: 800; color: #fff; margin-bottom: 15px; display: block; }
+
+    .btn-buy {
+      width: 100%;
+      background: #fff;
+      color: #000;
+      border: none;
+      padding: 15px;
+      border-radius: 15px;
+      font-weight: 800;
+      cursor: pointer;
+      transition: 0.3s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      text-transform: uppercase;
+    }
+
+    .btn-buy:hover { background: var(--accent); color: #000; }
+
+    /* MODAL */
+    .checkout {
+      display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0,0,0,0.9); backdrop-filter: blur(10px);
+      justify-content: center; align-items: center; z-index: 2000;
+    }
+
+    .checkout-box {
+      background: #1a1a1a; padding: 40px; border-radius: 35px; width: 90%;
+      max-width: 400px; text-align: center; border: 1px solid rgba(255,255,255,0.1);
+    }
+
+    .checkout-box input {
+      background: #333; border: none; color: #fff; padding: 15px; border-radius: 15px;
+      width: 80px; text-align: center; font-size: 18px; margin: 20px 0; outline: none;
+    }
+
+    .confirm-btn { background: var(--primary); color: white; border: none; padding: 16px; border-radius: 15px; width: 100%; font-weight: 800; cursor: pointer; }
+    
+    .total-price { font-size: 26px; font-weight: 800; color: var(--accent); margin-bottom: 20px; }
+  </style>
+</head>
+<body>
+
+  <nav class="navbar">
+    <div class="logo">MY TOKO <span>KUE</span></div>
+    <div class="nav-links">
+      <a href="PO.html"><i class="fas fa-history"></i> Riwayat P.O</a>
+      <a href="Loginn.php" class="logout-btn">Logout</a>
+    </div>
+  </nav>
+
+  <div class="hero">
+    <h1>Katalog Pre-Order</h1>
+    <p>Produk premium dibuat fresh sesuai pesanan Anda.</p>
+  </div>
+
+  <div class="container">
+    <div class="card">
+      <div class="image-container">
+        <div class="best-seller-badge"><i class="fas fa-crown"></i> BEST SELLER</div>
+        <div class="po-badge">OPEN P.O</div>
+        <img src="../gambar/bolu ketan.jpg" alt="Bolu Ketan">
+      </div>
+      <div class="card-body">
+        <h3>BOLU KETAN LUMER</h3>
+        <div class="po-info">
+          <span class="po-status"><i class="fas fa-sync-alt fa-spin"></i> STATUS: P.O</span>
+          <span class="po-time">Estimasi: 1 Hari</span>
+        </div>
+        <span class="price">Rp 3.000</span>
+        <button class="btn-buy" onclick="checkout('BOLU KETAN LUMER', 3000)">
+          <i class="fas fa-shopping-cart"></i> Pesan Sekarang
+        </button>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="image-container">
+        <div class="po-badge">OPEN P.O</div>
+        <img src="../gambar/brownis.jpg" alt="Bolu Brownish">
+      </div>
+      <div class="card-body">
+        <h3>BOLU BROWNISH</h3>
+        <div class="po-info">
+          <span class="po-status"><i class="fas fa-sync-alt fa-spin"></i> STATUS: P.O</span>
+          <span class="po-time">Estimasi: 1 Hari</span>
+        </div>
+        <span class="price">Rp 35.000</span>
+        <button class="btn-buy" onclick="checkout('BOLU BROWNISH', 35000)">
+          <i class="fas fa-shopping-cart"></i> Pesan Sekarang
+        </button>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="image-container">
+        <div class="po-badge">OPEN P.O</div>
+        <img src="../gambar/zuppa.jpeg" alt="Zuppa Soup">
+      </div>
+      <div class="card-body">
+        <h3>ZUPPA SOUP</h3>
+        <div class="po-info">
+          <span class="po-status"><i class="fas fa-sync-alt fa-spin"></i> STATUS: P.O</span>
+          <span class="po-time">Estimasi: 1 Hari</span>
+        </div>
+        <span class="price">Rp 8.000</span>
+        <button class="btn-buy" onclick="checkout('ZUPPA SOUP', 8000)">
+          <i class="fas fa-shopping-cart"></i> Pesan Sekarang
+        </button>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="image-container">
+        <div class="po-badge">OPEN P.O</div>
+        <img src="../toko_kue/gambar/makanan_horn.png" alt="Makanan Horn">
+      </div>
+      <div class="card-body">
+        <h3>Makanan Horn</h3>
+        <div class="po-info">
+          <span class="po-status"><i class="fas fa-sync-alt fa-spin"></i> STATUS: P.O</span>
+          <span class="po-time">Estimasi: 1 Hari</span>
+        </div>
+        <span class="price">Rp 3.000</span>
+        <button class="btn-buy" onclick="checkout('KUE LAPIS', 1500)">
+          <i class="fas fa-shopping-cart"></i> Pesan Sekarang
+        </button>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="image-container">
+        <div class="po-badge">OPEN P.O</div>
+        <img src="../gambar/bolu lembang.webp" alt="Bolu Lembang">
+      </div>
+      <div class="card-body">
+        <h3>BOLU LEMBANG</h3>
+        <div class="po-info">
+          <span class="po-status"><i class="fas fa-sync-alt fa-spin"></i> STATUS: P.O</span>
+          <span class="po-time">Estimasi: 1 Hari</span>
+        </div>
+        <span class="price">Rp 27.000</span>
+        <button class="btn-buy" onclick="checkout('BOLU LEMBANG', 27000)">
+          <i class="fas fa-shopping-cart"></i> Pesan Sekarang
+        </button>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="image-container">
+        <div class="po-badge">OPEN P.O</div>
+        <img src="../gambar/bolu kukus.jpg" alt="Bolu Kukus">
+      </div>
+      <div class="card-body">
+        <h3>BOLU KUKUS</h3>
+        <div class="po-info">
+          <span class="po-status"><i class="fas fa-sync-alt fa-spin"></i> STATUS: P.O</span>
+          <span class="po-time">Estimasi: 1 Hari</span>
+        </div>
+        <span class="price">Rp 3.500</span>
+        <button class="btn-buy" onclick="checkout('BOLU KUKUS', 3500)">
+          <i class="fas fa-shopping-cart"></i> Pesan Sekarang
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="checkout" id="checkout">
+    <div class="checkout-box">
+      <h2 id="productName" style="margin-bottom: 5px;"></h2>
+      <p style="opacity: 0.6; font-size: 14px;">Produk dikirim besok (1 Hari)</p>
+      
+      <input type="number" id="quantity" value="1" min="1" oninput="recalc()">
+      
+      <div class="total-price" id="totalDisplay">Rp 0</div>
+
+      <button class="confirm-btn" onclick="confirmOrder()">KONFIRMASI PESANAN P.O</button>
+      <p onclick="closeCheckout()" style="margin-top:20px; cursor:pointer; opacity:0.5; font-size: 14px;">Kembali</p>
+    </div>
+  </div>
+
+  <script>
+    let bPrice = 0;
+
+    function checkout(name, price) {
+      bPrice = price;
+      document.getElementById("productName").innerText = name;
+      document.getElementById("quantity").value = 1;
+      recalc();
+      document.getElementById("checkout").style.display = "flex";
+    }
+
+    function recalc() {
+      let q = document.getElementById("quantity").value;
+      let total = bPrice * q;
+      document.getElementById("totalDisplay").innerText = "Rp " + total.toLocaleString();
+    }
+
+    function closeCheckout() {
+      document.getElementById("checkout").style.display = "none";
+    }
+
+    function confirmOrder() {
+      let product = document.getElementById("productName").innerText;
+      let qty = parseInt(document.getElementById("quantity").value);
+      
+      localStorage.setItem("pesanan", JSON.stringify({
+        produk: product,
+        jumlah: qty,
+        total: bPrice * qty
+      }));
+
+      window.location.href = "pembayaran.html";
+    }
+  </script>
+</body>
+</html>

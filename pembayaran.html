@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Metode Pembayaran - My TOKO KUE</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary-red: #bd1111;
+      --secondary-red: #ff0000;
+      --success-green: #27ae60;
+      --dark-bg: rgba(20, 20, 20, 0.95);
+      --glass: rgba(255, 255, 255, 0.1);
+    }
+
+    body {
+      background-image: url("../gambar/merah.jpg");
+      background-repeat: no-repeat;
+      background-position: center;
+      background-attachment: fixed;
+      background-size: cover;
+      color: #fff;
+      margin: 0;
+      font-family: 'Inter', sans-serif;
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: radial-gradient(circle, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.8) 100%);
+      z-index: -1;
+    }
+
+    .navbar {
+      display: flex;
+      justify-content: space-between;
+      background-color: rgba(0, 0, 0, 0.8);
+      backdrop-filter: blur(10px);
+      padding: 15px 5%;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      border-bottom: 2px solid var(--primary-red);
+    }
+
+    .navbar .logo { font-size: 22px; font-weight: 800; letter-spacing: 1px; color: #fff; }
+    .navbar .logo span { color: var(--primary-red); }
+
+    .nav-links a {
+      margin-left: 20px;
+      text-decoration: none;
+      font-size: 14px;
+      color: #ddd;
+      transition: 0.3s;
+      font-weight: 600;
+    }
+
+    .nav-links a:hover { color: #fff; }
+    .logout-btn { color: #ffeb3b !important; border: 1px solid #ffeb3b; padding: 5px 15px; border-radius: 20px; }
+
+    .container {
+      max-width: 480px;
+      margin: 40px auto;
+      background: var(--dark-bg);
+      border-radius: 24px;
+      padding: 30px;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    h1 { text-align: center; font-size: 20px; margin-bottom: 30px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; }
+
+    /* CSS BARU UNTUK ALAMAT */
+    .address-group { margin-bottom: 25px; }
+    .address-group textarea {
+      width: 100%;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1.5px solid #444;
+      border-radius: 12px;
+      padding: 15px;
+      color: #fff;
+      font-family: inherit;
+      resize: none;
+      box-sizing: border-box;
+      transition: 0.3s;
+      margin-top: 8px;
+    }
+    .address-group textarea:focus {
+      border-color: var(--secondary-red);
+      outline: none;
+      background: rgba(255, 255, 255, 0.08);
+    }
+
+    .payment-group { margin-bottom: 20px; }
+    .group-label { font-size: 13px; color: #888; margin-bottom: 10px; display: block; font-weight: 600; }
+
+    .payment-option {
+      display: flex;
+      align-items: center;
+      margin-bottom: 12px;
+      padding: 15px;
+      border: 1.5px solid #333;
+      border-radius: 16px;
+      background: rgba(255, 255, 255, 0.03);
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .payment-option:hover { border-color: var(--secondary-red); background: rgba(255, 0, 0, 0.05); }
+
+    .payment-option input[type="radio"] {
+      appearance: none;
+      width: 20px;
+      height: 20px;
+      border: 2px solid #555;
+      border-radius: 50%;
+      margin-left: auto;
+      position: relative;
+    }
+
+    .payment-option input[type="radio"]:checked { border-color: var(--success-green); background: var(--success-green); }
+    .payment-option input[type="radio"]:checked::after {
+      content: "✓"; color: white; font-size: 12px; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+    }
+
+    .payment-option label { display: flex; align-items: center; cursor: pointer; font-weight: 600; font-size: 15px; width: 100%; }
+
+    .app-icon {
+      width: 32px; height: 32px; border-radius: 8px; margin-right: 15px; background: #444; display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 800;
+    }
+    .dana { background: #008ced; }
+    .gopay { background: #00aade; }
+    .shopee { background: #ee4d2d; }
+    .ovo { background: #4c2a86; }
+    .cod { background: #ff9800; }
+
+    .virtual-section { background: rgba(255, 255, 255, 0.05); padding: 20px; border-radius: 16px; text-align: center; margin: 20px 0; }
+    .bank-btns { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 10px; }
+    .bank-btns button { padding: 10px; border: none; border-radius: 10px; background: #333; color: #fff; font-weight: bold; cursor: pointer; font-size: 12px; transition: 0.2s; }
+    .bank-btns button:hover { background: var(--primary-red); }
+
+    .summary { border-top: 1px dashed #444; margin-top: 25px; padding-top: 20px; }
+    .total-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+    .total-row span { color: #888; font-size: 14px; }
+    .total-amount { font-size: 24px; color: #ffeb3b; font-weight: 800; }
+
+    .checkout-btn { width: 100%; padding: 16px; border: none; border-radius: 16px; background: var(--success-green); color: #fff; font-size: 16px; font-weight: 700; cursor: pointer; box-shadow: 0 10px 20px rgba(39, 174, 96, 0.3); transition: 0.3s; }
+    .checkout-btn:hover { background: #2ecc71; transform: translateY(-2px); }
+    .back-btn { display: block; text-align: center; margin-top: 20px; color: #888; text-decoration: none; font-size: 13px; }
+  </style>
+</head>
+<body>
+
+  <nav class="navbar">
+    <div class="logo">MY<span> TOKO KUE</span></div>
+    <div class="nav-links">
+      <a href="Toko.html">Home</a>
+      <a href="Loginn.php" class="logout-btn">Log Out</a>
+    </div>
+  </nav>
+
+  <div class="container">
+    <h1>Metode Pembayaran</h1>
+    
+    <form id="paymentForm">
+      <div class="address-group">
+        <span class="group-label">ALAMAT PENGIRIMAN LENGKAP</span>
+        <textarea id="alamatLengkap" rows="3" placeholder="Masukkan alamat lengkap (Nama Jalan, No. Rumah, RT/RW, Kec, Kota)"></textarea>
+      </div>
+
+      <span class="group-label">E-WALLET & TUNAI</span>
+      
+      <div class="payment-option">
+        <label for="cod">
+          <div class="app-icon cod">COD</div>
+          Bayar Ditempat
+        </label>
+        <input type="radio" id="cod" name="payment" value="Bayar Ditempat (COD)">
+      </div>
+
+      <div class="payment-option">
+        <label for="dana">
+          <div class="app-icon dana">DANA</div>
+          Dana
+        </label>
+        <input type="radio" id="dana" name="payment" value="Dana">
+      </div>
+
+      <div class="payment-option">
+        <label for="gopay">
+          <div class="app-icon gopay">GP</div>
+          GoPay
+        </label>
+        <input type="radio" id="gopay" name="payment" value="GoPay">
+      </div>
+
+      <div class="payment-option">
+        <label for="shopeepay">
+          <div class="app-icon shopee">SP</div>
+          ShopeePay
+        </label>
+        <input type="radio" id="shopeepay" name="payment" value="ShopeePay">
+      </div>
+
+      <div class="payment-option">
+        <label for="ovo">
+          <div class="app-icon ovo">OVO</div>
+          OVO
+        </label>
+        <input type="radio" id="ovo" name="payment" value="OVO">
+      </div>
+
+      <div class="virtual-section">
+        <span class="group-label">TRANSFER BANK (VA)</span>
+        <div class="bank-btns">
+          <button type="button" onclick="validateAndSend('BRIVA')">BRIVA</button>
+          <button type="button" onclick="validateAndSend('BNI')">BNI</button>
+          <button type="button" onclick="validateAndSend('DANAMON')">DANAMON</button>
+        </div>
+      </div>
+
+      <div class="summary">
+        <div class="total-row">
+          <span>Total Pembayaran</span>
+          <div class="total-amount" id="displayTotal">Rp 0</div>
+        </div>
+        <button type="button" class="checkout-btn" onclick="processCheckout()">KONFIRMASI PESANAN</button>
+      </div>
+    </form>
+    
+    <a href="Toko.html" class="back-btn">⬅ Kembali ke Toko</a>
+  </div>
+
+  <script>
+    // Load Data Pesanan
+    const pesanan = JSON.parse(localStorage.getItem("pesanan"));
+    
+    if (pesanan) {
+      document.getElementById("displayTotal").innerText = "Rp " + pesanan.total.toLocaleString('id-ID');
+    } else {
+      alert("Oops! Keranjang belanja kosong.");
+      window.location.href = "Toko.html";
+    }
+
+    function processCheckout() {
+      const selected = document.querySelector('input[name="payment"]:checked');
+      const alamat = document.getElementById("alamatLengkap").value;
+
+      // Cek Alamat
+      if (!alamat.trim()) {
+        alert("Mohon isi alamat lengkap Anda terlebih dahulu!");
+        return;
+      }
+
+      // Cek Metode Pembayaran
+      if (!selected) {
+        alert("Pilih metode pembayaran dulu, ya!");
+        return;
+      }
+
+      const pesan = `*PESANAN BARU - MY TOKO KUE*\n` +
+                    `----------------------------------\n` +
+                    `🍰 *Produk:* ${pesanan.produk}\n` +
+                    `🔢 *Jumlah:* ${pesanan.jumlah}\n` +
+                    `💳 *Metode:* ${selected.value}\n` +
+                    `💰 *Total:* Rp ${pesanan.total.toLocaleString('id-ID')}\n` +
+                    `----------------------------------\n` +
+                    `📍 *Alamat Pengiriman:*\n${alamat}\n` +
+                    `----------------------------------\n` +
+                    `Mohon segera diproses, ya!`;
+
+      sendToWA(pesan);
+    }
+
+    // Fungsi khusus untuk tombol Bank agar tetap cek alamat
+    function validateAndSend(bank) {
+      const alamat = document.getElementById("alamatLengkap").value;
+      if (!alamat.trim()) {
+        alert("Mohon isi alamat lengkap Anda terlebih dahulu!");
+        return;
+      }
+
+      const pesan = `*PESANAN BARU (TRANSFER VA)*\n` +
+                    `----------------------------------\n` +
+                    `🍰 *Produk:* ${pesanan.produk}\n` +
+                    `🔢 *Jumlah:* ${pesanan.jumlah}\n` +
+                    `🏦 *Bank:* ${bank}\n` +
+                    `💰 *Total:* Rp ${pesanan.total.toLocaleString('id-ID')}\n` +
+                    `----------------------------------\n` +
+                    `📍 *Alamat Pengiriman:*\n${alamat}\n` +
+                    `----------------------------------`;
+      sendToWA(pesan);
+    }
+
+    function sendToWA(text) {
+      const nomor = "6288218579845";
+      window.open(`https://wa.me/${nomor}?text=${encodeURIComponent(text)}`, "_blank");
+    }
+  </script>
+</body>
+</html>
